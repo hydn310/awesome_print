@@ -29,10 +29,10 @@ class Test_awesome_print(unittest.TestCase):
         self.assertEqual(format(-12345), '\x1b[1;34m-12345\x1b[0m')
 
     def test_Long_positive(self):
-        self.assertEqual(format(12345l), '\x1b[1;34m12345\x1b[0m')
+        self.assertEqual(format(9223372036854775807), '\x1b[1;34m9223372036854775807\x1b[0m')
 
     def test_Long_negative(self):
-        self.assertEqual(format(-12345l), '\x1b[1;34m-12345\x1b[0m')
+        self.assertEqual(format(-9223372036854775807), '\x1b[1;34m-9223372036854775807\x1b[0m')
 
     def test_Float_positive(self):
         self.assertEqual(format(123.45), '\x1b[1;34m123.45\x1b[0m')
@@ -84,12 +84,10 @@ class Test_awesome_print(unittest.TestCase):
                 '{\n  \x1b[1;34m1\x1b[0m: \x1b[1;34m2\x1b[0m\n}')
 
     def test_Dict_mixed(self):
-        self.assertEqual(format({None:False,'key':'value',2:5}),
-                '{\n' +
-                '  \x1b[0;31mNone\x1b[0m: \x1b[1;32mFalse\x1b[0m,\n' +
-                '     \x1b[1;34m2\x1b[0m: \x1b[1;34m5\x1b[0m,\n' +
-                '   \x1b[0;33mkey\x1b[0m: \x1b[0;33mvalue\x1b[0m\n' +
-                '}')
+        s = format({None:False,'key':'value',2:5})
+        self.assertTrue('\x1b[0;31mNone\x1b[0m: \x1b[1;32mFalse\x1b[0m' in s)
+        self.assertTrue('\x1b[0;33mkey\x1b[0m: \x1b[0;33mvalue\x1b[0m' in s)
+        self.assertTrue('\x1b[1;34m2\x1b[0m: \x1b[1;34m5\x1b[0m' in s)
 
     def test_List_in_List(self):
         self.assertEqual(format(

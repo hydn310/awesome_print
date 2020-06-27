@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from awesome_print import ap
 
 objects = [
@@ -20,10 +21,10 @@ objects = [
         }
         ]
 
-print '>> from awesome_print import ap'
+print('>> from awesome_print import ap')
 for object in objects:
     if type(object) is str:
-        print '>> ap("' + str(object) +'")'
+        print('>> ap("' + str(object) +'")')
     else:
-        print '>> ap(' + str(object) +')'
+        print('>> ap(' + str(object) +')')
     ap(object)

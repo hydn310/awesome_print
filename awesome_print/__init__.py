@@ -1,1 +1,1 @@
-from awesome_print import ap
+from .awesome_print import ap

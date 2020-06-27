@@ -4,38 +4,49 @@ Usage:
     from awesome_print import ap
     ap(object)
 """
-import __builtin__
-from types import *
+from __future__ import print_function
+from types import LambdaType
+
+try:
+    basestring
+    def is_str(s):
+        return isinstance(s, basestring)
+except NameError:
+    def is_str(s):
+        return isinstance(s, str)
+
+try:
+    long
+    def is_num(n):
+        return isinstance(n, (int, long, float, complex))
+except NameError:
+    def is_num(n):
+        return isinstance(n, (int, float, complex))
 
 mode = 'ansi'
 
 def ap(*args):
     for arg in args:
-        print format(arg)
+        print(format(arg))
 
 def indent(level):
     return '  ' * level
 
 def format(obj, level = 0):
-    type = __builtin__.type(obj)
-
-    if type is NoneType:
+    if obj is None:
         return red('None')
 
-    if type is TypeType:
-        pass
-
-    if type is BooleanType:
+    if isinstance(obj, bool):
         return green(str(obj))
 
-    if type in [StringType, UnicodeType]:
+    if is_str(obj):
         return yellow(str(obj))
 
-    if type in [IntType, LongType, FloatType, ComplexType]:
+    if is_num(obj):
         return bold_blue(str(obj))
 
-    if type in (TupleType, ListType):
-        open, close = ('(', ')') if type is TupleType else ('[', ']')
+    if isinstance(obj, (list, tuple)):
+        open, close = ('(', ')') if isinstance(obj, tuple) else ('[', ']')
         if len(obj) is 0:
             return open + close
 
@@ -51,7 +62,7 @@ def format(obj, level = 0):
                         ",\n".join(s) + \
                "\n" + indent(level) + close
 
-    if type is DictType:
+    if isinstance(obj, dict):
         if len(obj) is 0:
             return '{}'
 
@@ -66,7 +77,7 @@ def format(obj, level = 0):
                         ",\n".join(s) + \
                "\n" + indent(level) + '}'
 
-    if type is LambdaType:
+    if type(obj) is LambdaType:
         return str(obj)
 
     return str(obj)
